@@ -1,1 +1,1 @@
-// Dashboard com perguntas + interações
+// Dashboard com perguntas e ✔️❌

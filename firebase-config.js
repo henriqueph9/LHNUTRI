@@ -1,1 +1,1 @@
-// Configurações do Firebase
+// Firebase configuration

@@ -1,1 +1,1 @@
-// Painel Admin com visualização dos dados
+// Painel Admin
