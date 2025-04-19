@@ -1,1 +1,1 @@
-// Painel Admin
+// Conteúdo simulado para pages/admin.js

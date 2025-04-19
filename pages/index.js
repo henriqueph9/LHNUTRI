@@ -1,1 +1,1 @@
-// Página de login
+// Conteúdo simulado para pages/index.js

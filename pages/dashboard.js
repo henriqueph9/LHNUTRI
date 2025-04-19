@@ -1,1 +1,1 @@
-// Dashboard com perguntas e ✔️❌
+// Conteúdo simulado para pages/dashboard.js
