@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth' // ✅ Correto!
-import app from '../firebase' // ✅ Firebase App
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth' // ✅ IMPORTADA AQUI
+import app from '../firebase'
 
 export default function LoginPage() {
   const router = useRouter()
-  const auth = getAuth(app) // ✅ Correto para evitar undefined
+  const auth = getAuth(app) // ✅ INSTANCIADA COM APP
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -19,7 +19,7 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha)
       const user = userCredential.user
 
-      // Verifica se é admin e redireciona
+      // Se UID for do admin, envia para painel
       if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
         router.push('/admin')
       } else {
@@ -49,6 +49,7 @@ export default function LoginPage() {
           className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
           required
         />
+
         <input
           type="password"
           placeholder="Senha"
@@ -66,7 +67,8 @@ export default function LoginPage() {
         </button>
 
         <p className="mt-4 text-sm text-center text-gray-600">
-          Ainda não tem conta? <a href="/register" className="text-green-700 underline">Cadastrar</a>
+          Ainda não tem conta?{' '}
+          <a href="/register" className="text-green-700 underline">Cadastrar</a>
         </p>
       </form>
     </div>
