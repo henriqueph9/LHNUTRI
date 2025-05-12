@@ -3,62 +3,71 @@ import { useRouter } from 'next/router'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import app from '../firebase'
 
-export default function Login() {
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [erro, setErro] = useState('')
+export default function LoginPage() {
   const router = useRouter()
   const auth = getAuth(app)
 
+  const [email, setEmail] = useState('')
+  const [senha, setSenha] = useState('')
+  const [erro, setErro] = useState('')
+
   const handleLogin = async (e) => {
     e.preventDefault()
+    setErro('')
+
     try {
-      await signInWithEmailAndPassword(auth, email, senha)
-      router.push('/dashboard')
+      const userCredential = await signInWithEmailAndPassword(auth, email, senha)
+      const user = userCredential.user
+
+      // Redireciona o admin
+      if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
+        router.push('/admin')
+      } else {
+        router.push('/dashboard')
+      }
     } catch (error) {
-      setErro('E-mail ou senha inválidos')
+      setErro(error.message)
     }
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9] flex items-center justify-center px-4">
-      <div className="bg-white w-full max-w-sm p-6 rounded-2xl shadow space-y-5 text-center">
-        <div className="flex flex-col items-center space-y-1">
-          <img src="/logo.png" alt="LH Nutri" className="w-10 h-10" />
-          <h1 className="text-2xl font-bold text-[#12736C]">LH Nutri</h1>
-          <p className="text-sm text-gray-600 leading-tight">
-            Comece seu acompanhamento com o Nutri Luiz Henrique
-          </p>
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <form onSubmit={handleLogin} className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        <div className="text-center mb-6">
+          <img src="/icons/icon-192.png" alt="Logo LH Nutri" className="mx-auto w-12" />
+          <h1 className="text-2xl font-bold text-green-700 mt-2">LH Nutri</h1>
+          <p className="text-sm text-gray-500">Acesse sua conta</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-4 text-left">
-          <input
-            type="email"
-            placeholder="E-mail"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full border border-gray-300 rounded-xl p-3"
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            required
-            className="w-full border border-gray-300 rounded-xl p-3"
-          />
-          {erro && <p className="text-sm text-red-600 text-center">{erro}</p>}
-          <button className="w-full bg-[#12736C] text-white py-3 rounded-xl font-semibold">
-            Entrar
-          </button>
-        </form>
+        {erro && <p className="text-red-500 text-sm mb-3 text-center">{erro}</p>}
 
-        <p className="text-sm text-gray-600">
-          Ainda não tem conta?{' '}
-          <a href="/register" className="text-[#12736C] underline">Cadastre-se</a>
+        <input
+          type="email"
+          placeholder="E-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+          required
+        />
+        <button
+          type="submit"
+          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
+        >
+          Entrar
+        </button>
+
+        <p className="mt-4 text-sm text-center text-gray-600">
+          Ainda não tem conta? <a href="/register" className="text-green-700 underline">Cadastrar</a>
         </p>
-      </div>
+      </form>
     </div>
   )
 }
