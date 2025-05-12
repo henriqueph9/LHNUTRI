@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth' // ✅ IMPORTADA AQUI
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import app from '../firebase'
 
 export default function LoginPage() {
   const router = useRouter()
-  const auth = getAuth(app) // ✅ INSTANCIADA COM APP
+  const auth = getAuth(app)
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -19,7 +19,6 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha)
       const user = userCredential.user
 
-      // Se UID for do admin, envia para painel
       if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
         router.push('/admin')
       } else {
@@ -36,7 +35,7 @@ export default function LoginPage() {
         <div className="text-center mb-6">
           <img src="/icons/icon-192.png" alt="Logo LH Nutri" className="mx-auto w-12" />
           <h1 className="text-2xl font-bold text-green-700 mt-2">LH Nutri</h1>
-          <p className="text-sm text-gray-500">Acesse sua conta</p>
+          <p className="text-sm text-gray-500">Comece seu acompanhamento com o Nutri Luiz Henrique</p>
         </div>
 
         {erro && <p className="text-red-500 text-sm mb-3 text-center">{erro}</p>}
@@ -46,7 +45,7 @@ export default function LoginPage() {
           placeholder="E-mail"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+          className="w-full mb-4 p-3 border rounded-lg"
           required
         />
 
@@ -55,7 +54,7 @@ export default function LoginPage() {
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
+          className="w-full mb-4 p-3 border rounded-lg"
           required
         />
 
