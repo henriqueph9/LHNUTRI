@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import app from '../firebase'
+import { signInWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '../firebase' // pegando auth direto do firebase.js
 
 export default function LoginPage() {
   const router = useRouter()
-  const auth = getAuth(app)
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -19,14 +18,14 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha)
       const user = userCredential.user
 
-      // Redireciona o admin
+      // Se for admin, redireciona
       if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
         router.push('/admin')
       } else {
         router.push('/dashboard')
       }
     } catch (error) {
-      setErro(error.message)
+      setErro('E-mail ou senha inválidos.')
     }
   }
 
