@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../firebase' // pegando auth direto do firebase.js
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth' // ✅ Correto!
+import app from '../firebase' // ✅ Firebase App
 
 export default function LoginPage() {
   const router = useRouter()
+  const auth = getAuth(app) // ✅ Correto para evitar undefined
 
   const [email, setEmail] = useState('')
   const [senha, setSenha] = useState('')
@@ -18,7 +19,7 @@ export default function LoginPage() {
       const userCredential = await signInWithEmailAndPassword(auth, email, senha)
       const user = userCredential.user
 
-      // Se for admin, redireciona
+      // Verifica se é admin e redireciona
       if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
         router.push('/admin')
       } else {
@@ -56,6 +57,7 @@ export default function LoginPage() {
           className="w-full mb-4 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600"
           required
         />
+
         <button
           type="submit"
           className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition"
