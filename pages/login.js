@@ -1,33 +1,32 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import app from '../firebase'
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase'; // ajuste o caminho se necessário
 
 export default function LoginPage() {
-  const router = useRouter()
-  const auth = getAuth(app)
-
-  const [email, setEmail] = useState('')
-  const [senha, setSenha] = useState('')
-  const [erro, setErro] = useState('')
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [erro, setErro] = useState('');
 
   const handleLogin = async (e) => {
-    e.preventDefault()
-    setErro('')
+    e.preventDefault();
+    setErro('');
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, senha)
-      const user = userCredential.user
+      const userCredential = await signInWithEmailAndPassword(auth, email, senha);
+      const user = userCredential.user;
 
       if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
-        router.push('/admin')
+        router.push('/admin');
       } else {
-        router.push('/dashboard')
+        router.push('/dashboard');
       }
     } catch (error) {
-      setErro('E-mail ou senha inválidos.')
+      console.error(error);
+      setErro('E-mail ou senha inválidos.');
     }
-  }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
@@ -71,5 +70,5 @@ export default function LoginPage() {
         </p>
       </form>
     </div>
-  )
+  );
 }
