@@ -5,11 +5,10 @@ import {
   collection,
   getDocs,
   getFirestore,
-  doc,
   query,
   orderBy,
 } from 'firebase/firestore'
-import app from '../firebase'
+import { app } from '../firebase'
 import { format, addDays, subDays } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { Bar } from 'react-chartjs-2'
@@ -76,7 +75,7 @@ export default function AdminPage() {
                 {
                   label: 'Adesão (✔️)',
                   data: [totalDieta, totalTreino, totalAgua],
-                  backgroundColor: ['#10b981', '#f97316', '#6366f1'], // verde, laranja, azul
+                  backgroundColor: ['#10b981', '#f97316', '#6366f1'],
                 },
               ],
             },
@@ -115,92 +114,55 @@ export default function AdminPage() {
   if (acessoNegado) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-center text-red-600 font-semibold">
-          Acesso negado. Esta área é restrita ao administrador.
-        </p>
+        <p className="text-red-600 text-lg font-bold">Acesso negado</p>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-white p-4 max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between mb-2">
+    <div className="p-6 max-w-6xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Painel do Administrador</h1>
+      <h2 className="text-lg mb-6">{dataTitulo}</h2>
+
+      <div className="flex justify-between mb-4">
         <button
-          onClick={() => router.push('/dashboard')}
-          className="text-sm text-gray-600 hover:underline"
-        >
-          ← Voltar
-        </button>
-        <h1 className="text-lg font-bold text-gray-800 text-center w-full -ml-8">
-          {dataTitulo}
-        </h1>
-      </div>
-
-      {usuarios.length === 0 ? (
-        <p className="text-gray-500">Carregando usuários...</p>
-      ) : (
-        usuarios.map((user, index) => (
-          <div
-            key={index}
-            className="border p-4 rounded-xl bg-gray-50 shadow-sm mb-4"
-          >
-            <p className="font-semibold text-lg mb-2">{user.nome}</p>
-            <p className="text-sm text-gray-600 mb-2">{user.email}</p>
-
-            {user.checklist ? (
-              <div className="mb-2">
-                <p className="font-medium text-green-700">Checklist:</p>
-                <p>🟢 Dieta: {user.checklist.dieta ? '✔️' : '❌'}</p>
-                <p>🏋️ Treino: {user.checklist.treino ? '✔️' : '❌'}</p>
-                <p>💧 Água: {user.checklist.agua ? '✔️' : '❌'}</p>
-                <p className="text-sm italic text-gray-500">
-                  Obs: {user.checklist.observacao}
-                </p>
-              </div>
-            ) : (
-              <p className="text-sm text-gray-500 mb-2">
-                Nenhum checklist registrado
-              </p>
-            )}
-
-            {user.relatorio ? (
-              <div className="mt-2">
-                <p className="font-medium text-blue-700">Relatório da Noite:</p>
-                <p>📊 Nota da dieta: {user.relatorio.nota}</p>
-                <p>💧 Água: {user.relatorio.agua}</p>
-                <p>🏃 Treinou: {user.relatorio.treino}</p>
-              </div>
-            ) : (
-              <p className="text-sm text-gray-500">
-                Nenhum relatório registrado
-              </p>
-            )}
-
-            {user.grafico ? (
-              <div className="mt-4">
-                <Bar data={user.grafico.data} options={user.grafico.options} />
-              </div>
-            ) : (
-              <p className="text-sm text-gray-400">Sem dados suficientes para gráfico.</p>
-            )}
-          </div>
-        ))
-      )}
-
-      <div className="flex justify-between mt-6">
-        <button
+          className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
           onClick={() => mudarDia('anterior')}
-          className="px-4 py-2 bg-gray-200 rounded-xl font-medium text-gray-800 hover:bg-gray-300"
         >
-          ← Anterior
+          Dia Anterior
         </button>
         <button
+          className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
           onClick={() => mudarDia('proximo')}
-          className="px-4 py-2 bg-gray-200 rounded-xl font-medium text-gray-800 hover:bg-gray-300"
         >
-          Próximo →
+          Próximo Dia
         </button>
       </div>
+
+      {usuarios.map((usuario, index) => (
+        <div key={index} className="border p-4 rounded mb-6 shadow-md bg-white">
+          <h3 className="text-xl font-semibold mb-2">{usuario.nome}</h3>
+          <p className="text-sm text-gray-600 mb-2">{usuario.email}</p>
+
+          <div className="mb-4">
+            <strong>Checklist:</strong>
+            <pre className="text-sm bg-gray-100 p-2 rounded mt-1">
+              {JSON.stringify(usuario.checklist || {}, null, 2)}
+            </pre>
+          </div>
+
+          <div className="mb-4">
+            <strong>Relatório:</strong>
+            <pre className="text-sm bg-gray-100 p-2 rounded mt-1">
+              {JSON.stringify(usuario.relatorio || {}, null, 2)}
+            </pre>
+          </div>
+
+          <div>
+            <Bar data={usuario.grafico.data} options={usuario.grafico.options} />
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
