@@ -139,53 +139,56 @@ export default function AdminPage() {
         </button>
       </div>
 
- <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded">
-  <thead className="bg-gray-100 text-gray-700 text-sm">
-    <tr>
-      <th className="px-4 py-2 text-left">Nome</th>
-      <th className="px-4 py-2 text-left">E-mail</th>
-      <th className="px-4 py-2 text-center">Dieta</th>
-      <th className="px-4 py-2 text-center">Treino</th>
-      <th className="px-4 py-2 text-center">Água</th>
-      <th className="px-4 py-2 text-center">Detalhes</th>
-    </tr>
-  </thead>
-  <tbody>
-    {usuarios.map((usuario, index) => (
-      <tr key={index} className="border-b hover:bg-gray-50 text-sm">
-        <td className="px-4 py-2">{usuario.nome}</td>
-        <td className="px-4 py-2">{usuario.email}</td>
-        <td className="px-4 py-2 text-center">
-          {usuario.checklist?.dieta ? '✔️' : '❌'}
-        </td>
-        <td className="px-4 py-2 text-center">
-          {usuario.checklist?.treino ? '✔️' : '❌'}
-        </td>
-        <td className="px-4 py-2 text-center">
-          {usuario.checklist?.agua ? '✔️' : '❌'}
-        </td>
-        <td className="px-4 py-2 text-center">
-          <button
-            onClick={() =>
-              alert(JSON.stringify(usuario.relatorio || {}, null, 2))
-            }
-            className="text-blue-600 hover:underline"
-          >
-            Ver
-          </button>
-        </td>
-      </tr>
-    ))}
-  </tbody>
-</table>
-    
+      <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded mb-6">
+        <thead className="bg-gray-100 text-gray-700 text-sm">
+          <tr>
+            <th className="px-4 py-2 text-left">Nome</th>
+            <th className="px-4 py-2 text-left">E-mail</th>
+            <th className="px-4 py-2 text-center">Dieta</th>
+            <th className="px-4 py-2 text-center">Treino</th>
+            <th className="px-4 py-2 text-center">Água</th>
+            <th className="px-4 py-2 text-center">Detalhes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {usuarios.map((usuario, index) => (
+            <tr key={index} className="border-b hover:bg-gray-50 text-sm">
+              <td className="px-4 py-2">{usuario.nome}</td>
+              <td className="px-4 py-2">{usuario.email}</td>
+              <td className="px-4 py-2 text-center">
+                {usuario.checklist?.dieta ? '✔️' : '❌'}
+              </td>
+              <td className="px-4 py-2 text-center">
+                {usuario.checklist?.treino ? '✔️' : '❌'}
+              </td>
+              <td className="px-4 py-2 text-center">
+                {usuario.checklist?.agua ? '✔️' : '❌'}
+              </td>
+              <td className="px-4 py-2 text-center">
+                <button
+                  onClick={() =>
+                    alert(JSON.stringify(usuario.relatorio || {}, null, 2))
+                  }
+                  className="text-blue-600 hover:underline"
+                >
+                  Ver
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      {/* Relatórios e Gráficos Abaixo da Tabela */}
+      {usuarios.map((usuario, index) => (
+        <div key={index} className="mb-10 border-t pt-4">
+          <h3 className="font-semibold mb-2">{usuario.nome} - Gráfico & Relatório</h3>
           <div className="mb-4">
             <strong>Relatório:</strong>
-            <pre className="text-sm bg-gray-100 p-2 rounded mt-1">
+            <pre className="text-sm bg-gray-100 p-2 rounded mt-1 whitespace-pre-wrap">
               {JSON.stringify(usuario.relatorio || {}, null, 2)}
             </pre>
           </div>
-
           <div>
             <Bar data={usuario.grafico.data} options={usuario.grafico.options} />
           </div>
