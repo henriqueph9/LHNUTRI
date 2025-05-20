@@ -1,17 +1,29 @@
-import { useState } from "react";
-import Cabecalho from "../components/Cabecalho";
-import DiaRegistro from "../components/DiaRegistro";
+// pages/index.js
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
 
 export default function Home() {
-  // Data de hoje para passar para o componente de registro
-  const hoje = new Date();
+  const router = useRouter();
 
-  return (
-    <main className="min-h-screen bg-gray-50 p-6">
-      <Cabecalho />
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Se for o admin, manda pro painel admin
+        if (user.uid === 'GGT2USGNN2QbzhaTaXTlhHZVro12') {
+          router.push("/admin");
+        } else {
+          router.push("/dashboard");
+        }
+      } else {
+        // Não logado → vai pra tela de login
+        router.push("/login");
+      }
+    });
 
-      <h1 className="text-2xl font-bold mb-4">Registro do Dia</h1>
-      <DiaRegistro data={hoje} />
-    </main>
-  );
+    return () => unsubscribe();
+  }, [router]);
+
+  return <div className="p-4 text-center">Carregando...</div>;
 }
