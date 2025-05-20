@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { getAuth, onAuthStateChanged } from 'firebase/auth'
+import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth'
 import {
   collection,
   getDocs,
@@ -111,6 +111,11 @@ export default function AdminPage() {
     )
   }
 
+  const handleLogout = async () => {
+    await signOut(auth)
+    router.push('/')
+  }
+
   if (acessoNegado) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -167,7 +172,7 @@ export default function AdminPage() {
               <td className="px-4 py-2 text-center">
                 <button
                   onClick={() =>
-                    alert(JSON.stringify(usuario.relatorio || {}, null, 2))
+                    alert(usuario.relatorio?.observacao || 'Sem observação para hoje.')
                   }
                   className="text-blue-600 hover:underline"
                 >
@@ -179,7 +184,6 @@ export default function AdminPage() {
         </tbody>
       </table>
 
-      {/* Relatórios e Gráficos Abaixo da Tabela */}
       {usuarios.map((usuario, index) => (
         <div key={index} className="mb-10 border-t pt-4">
           <h3 className="font-semibold mb-2">{usuario.nome} - Gráfico & Relatório</h3>
@@ -194,6 +198,16 @@ export default function AdminPage() {
           </div>
         </div>
       ))}
+
+      {/* Botão de Sair */}
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-6 py-2 rounded hover:bg-red-600"
+        >
+          Sair
+        </button>
+      </div>
     </div>
   )
 }
