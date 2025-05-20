@@ -139,18 +139,46 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {usuarios.map((usuario, index) => (
-        <div key={index} className="border p-4 rounded mb-6 shadow-md bg-white">
-          <h3 className="text-xl font-semibold mb-2">{usuario.nome}</h3>
-          <p className="text-sm text-gray-600 mb-2">{usuario.email}</p>
-
-          <div className="mb-4">
-            <strong>Checklist:</strong>
-            <pre className="text-sm bg-gray-100 p-2 rounded mt-1">
-              {JSON.stringify(usuario.checklist || {}, null, 2)}
-            </pre>
-          </div>
-
+ <table className="min-w-full table-auto border-collapse bg-white shadow-md rounded">
+  <thead className="bg-gray-100 text-gray-700 text-sm">
+    <tr>
+      <th className="px-4 py-2 text-left">Nome</th>
+      <th className="px-4 py-2 text-left">E-mail</th>
+      <th className="px-4 py-2 text-center">Dieta</th>
+      <th className="px-4 py-2 text-center">Treino</th>
+      <th className="px-4 py-2 text-center">Água</th>
+      <th className="px-4 py-2 text-center">Detalhes</th>
+    </tr>
+  </thead>
+  <tbody>
+    {usuarios.map((usuario, index) => (
+      <tr key={index} className="border-b hover:bg-gray-50 text-sm">
+        <td className="px-4 py-2">{usuario.nome}</td>
+        <td className="px-4 py-2">{usuario.email}</td>
+        <td className="px-4 py-2 text-center">
+          {usuario.checklist?.dieta ? '✔️' : '❌'}
+        </td>
+        <td className="px-4 py-2 text-center">
+          {usuario.checklist?.treino ? '✔️' : '❌'}
+        </td>
+        <td className="px-4 py-2 text-center">
+          {usuario.checklist?.agua ? '✔️' : '❌'}
+        </td>
+        <td className="px-4 py-2 text-center">
+          <button
+            onClick={() =>
+              alert(JSON.stringify(usuario.relatorio || {}, null, 2))
+            }
+            className="text-blue-600 hover:underline"
+          >
+            Ver
+          </button>
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+    
           <div className="mb-4">
             <strong>Relatório:</strong>
             <pre className="text-sm bg-gray-100 p-2 rounded mt-1">
